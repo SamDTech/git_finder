@@ -1,6 +1,9 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Footer from "./components/layout/Footer";
 import Navbar from "./components/layout/Navbar";
+import About from "./pages/About";
+import Home from "./pages/Home";
+import NotFound from "./pages/NotFound";
 
 function App() {
   return (
@@ -9,10 +12,15 @@ function App() {
         <Navbar />
 
         <main className="container mx-auto px-3 pb-12">
-          content
+          <Routes>
+            <Route path="/" exact element={<Home />} />
+            <Route path="/about" exact element={<About />} />
+            <Route path="/notfound" exact element={<NotFound />} />
+            <Route path="/*" exact element={<NotFound />} />
+          </Routes>
         </main>
 
-        <Footer/>
+        <Footer />
       </div>
     </Router>
   );
