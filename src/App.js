@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Alert from "./components/layout/Alert";
 import Footer from "./components/layout/Footer";
 import Navbar from "./components/layout/Navbar";
 import { AlertProvider } from "./context/alert/AlertContext";
@@ -16,6 +17,8 @@ function App() {
             <Navbar />
 
             <main className="container mx-auto px-3 pb-12">
+              <Alert />
+
               <Routes>
                 <Route path="/" exact element={<Home />} />
                 <Route path="/about" exact element={<About />} />
