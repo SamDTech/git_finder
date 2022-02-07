@@ -13,19 +13,28 @@ export const GithubProvider = ({ children }) => {
 
   const { users, loading } = state;
 
-  const fetchUsers = async () => {
+  const searchUsers = async (text) => {
     dispatch({ type: "LOADING" });
-    const response = await fetch(`${GITHUB_URL}/users`, {
+
+    const params = new URLSearchParams({
+      q: text,
+    });
+
+    const response = await fetch(`${GITHUB_URL}/search/users?${params}`, {
       headers: {
         Authorization: `token ${GITHUB_TOKEN}`,
       },
     });
-    const data = await response.json();
+    const {items} = await response.json();
 
     dispatch({
       type: "GET_USERS",
-      payload: data,
+      payload: items,
     });
+  };
+
+  const clearUsers = () => {
+    dispatch({ type: "CLEAR_USERS" });
   };
 
   return (
@@ -33,7 +42,8 @@ export const GithubProvider = ({ children }) => {
       value={{
         users,
         loading,
-        fetchUsers,
+        searchUsers,
+        clearUsers,
       }}
     >
       {children}
