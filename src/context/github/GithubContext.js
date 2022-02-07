@@ -3,70 +3,21 @@ import githubReducer from "./GithubReducer";
 
 const GithubContext = createContext();
 
-const GITHUB_URL = process.env.REACT_APP_GITHUB_URL;
-const GITHUB_TOKEN = process.env.REACT_APP_GITHUB_TOKEN;
-
 export const GithubProvider = ({ children }) => {
-  const initialState = { users: [], user: {}, loading: false };
+  const initialState = {
+    users: [],
+    user: {},
+    repos: [],
+    loading: false,
+  };
 
   const [state, dispatch] = useReducer(githubReducer, initialState);
-
-  const { users, user, loading } = state;
-
-  const searchUsers = async (text) => {
-    dispatch({ type: "LOADING" });
-
-    const params = new URLSearchParams({
-      q: text,
-    });
-
-    const response = await fetch(`${GITHUB_URL}/search/users?${params}`, {
-      headers: {
-        Authorization: `token ${GITHUB_TOKEN}`,
-      },
-    });
-    const { items } = await response.json();
-
-    dispatch({
-      type: "GET_USERS",
-      payload: items,
-    });
-  };
-
-  const getUser = async (login) => {
-    dispatch({ type: "LOADING" });
-
-    const response = await fetch(`${GITHUB_URL}/users/${login}`, {
-      headers: {
-        Authorization: `token ${GITHUB_TOKEN}`,
-      },
-    });
-
-    if (response.status === 404) {
-      window.location.href = "/notfound";
-    } else {
-      const data = await response.json();
-
-      dispatch({
-        type: "GET_USER",
-        payload: data,
-      });
-    }
-  };
-
-  const clearUsers = () => {
-    dispatch({ type: "CLEAR_USERS" });
-  };
 
   return (
     <GithubContext.Provider
       value={{
-        users,
-        user,
-        loading,
-        searchUsers,
-        clearUsers,
-        getUser
+        ...state,
+        dispatch,
       }}
     >
       {children}
